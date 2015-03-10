@@ -1,6 +1,6 @@
 {
   "name":"sporejs",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "author": "tangoboy <137757831@qq.com>",
   "description": "A simple OO Class factory",
   "main": "spore.js",
