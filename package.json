@@ -1,0 +1,30 @@
+{
+  "name":"sporejs",
+  "version": "1.4.4",
+  "author": "tangoboy <137757831@qq.com>",
+  "description": "A simple OO Class factory",
+  "main": "spore.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fengdi/spore.js.git"
+  },
+  "keywords": [
+    "class",
+    "Class",
+    "Constructor",
+    "prototype",
+    "inheritance",
+    "class inheritance"
+  ],
+  "license": "MIT",
+  "analyze": false,
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "mocha ./test"
+  },
+  "engines": {
+    "node": ">=0.6"
+  }
+}
