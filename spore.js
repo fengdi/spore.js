@@ -641,7 +641,7 @@
 
     $Class.Spore = $Class.Base = $Class.create({
         __: function(){
-            this.uuid = Class.uuid();
+            this.uuid = $Class.uuid();
         },
         destroy: function(){
             this.trigger('destroy');
