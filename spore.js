@@ -31,7 +31,7 @@
 	isStr = function(s){return opt.call(s)=="[object String]"},
 	isFun = function(f){return opt.call(f)=="[object Function]"},
 	isObj = function(o){return opt.call(o)=="[object Object]"},
-    isArr = function(a){return opt.call(a)=="[object Array]"},
+	isArr = function(a){return opt.call(a)=="[object Array]"},
 	isSupport__proto__ = ({}).__proto__ == Object.prototype,//检验__proto__特性
 	clone = function(obj){
 		var newObj,
@@ -121,7 +121,7 @@
 		 * @doc
 		 */
 		create: function(data) {
-			return $Class.inherit($Class.Base||Object, data);
+			return $Class.inherit($Class.Object||Object, data);
 		},
 		/**
 		 * 实例化类 可以替代 new 操作符
@@ -662,7 +662,7 @@
 
 
 
-	// Base
+	// Object
 	// 所有$Class.create的类Foo都继承自$Class.Object     Foo <= $Class.Object <= Object
 	// 因此你可以通过$Class.Object.prototype拓展所有create出来的类
 	// 你也可以删除$Class.Object 或者 $Class.Object = null 这样就可以改变继承为 Foo <= Object
