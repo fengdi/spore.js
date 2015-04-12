@@ -653,6 +653,87 @@
 
 
 
+    //Template
+
+    // ---------------------
+    //  - from: underscore.js
+    
+    var Template = function(text, options){
+
+		var index = 0;
+		var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
+		var escapes = {
+			"'":      "'",
+			'\\':     '\\',
+			'\r':     'r',
+			'\n':     'n',
+			'\u2028': 'u2028',
+			'\u2029': 'u2029'
+		};
+		var source = "__p+='";
+		var tryPrefix = 'try{';
+		var trySuffix = '}catch(e){<code>}';
+
+		options = options||{};
+
+		var debugCode = function (evaluate, debugMode) {
+			debugMode = debugMode || options.debug;
+			if(debugMode == 0){
+				return evaluate;
+			}else if(debugMode == 1){
+				return tryPrefix + evaluate + trySuffix.replace(/<code>/,'');
+			}else if(debugMode == 2){
+				return tryPrefix + evaluate + trySuffix.replace(/<code>/,'throw e.toString() +\' hello world\'');
+			}
+		};
+
+		text.replace(/<%=([\s\S]+?)%>|<%([\s\S]+?)%>|$/g, function(match, interpolate, evaluate, offset){
+			source += text.slice(index, offset).replace(escaper, function(match) {
+				return '\\' + escapes[match];
+			});
+
+			index = offset + match.length;
+			if (interpolate) {
+				source += "';\n"+ debugCode( "__p+=(__t=(" + interpolate + "))==null?'':__t;" ) +";\n'";
+			} else if (evaluate) {
+				source += "';\n"+ debugCode( evaluate + ";" ) + ";\n__p+='";
+			}
+			// Adobe VMs need the match returned to produce the correct offest.
+			return match;
+		});
+		
+
+		source += "';\n";
+
+		// If a variable is not specified, place data values in local scope.
+		if (!options.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+		source = "var __t,__p='',__j=Array.prototype.join," +
+		"print=function(){__p+=__j.call(arguments,'');};\n" +
+		source + 'return __p;\n';
+
+		try {
+			var render = new Function(options.variable || 'obj', source);
+		} catch (e) {
+			e.source = source;
+			throw e;
+		}
+		var template = function(data) {
+	      return render.call(this, data);
+	    };
+
+	    // Provide the compiled source as a convenience for precompilation.
+	    var argument = options.variable || 'obj';
+	    template.source = 'function(' + argument + '){\n' + source + '}';
+
+	    return template;
+	};
+
+
+	$Class.Template = Template;
+
+
+
 
 
 
