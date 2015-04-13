@@ -136,6 +136,10 @@
          * @doc
          */
         create: function(members) {
+            members = members||{};
+            if(!(config.constructorName in members)){
+                members[config.constructorName] = function(){};
+            }
             return $Class.inherit($Class.Object||Object, members);
         },
         /**
