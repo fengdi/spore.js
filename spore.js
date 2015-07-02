@@ -360,6 +360,13 @@
 
     // Bind one or more space separated events, `events`, to a `callback`
     // function. Passing `"all"` will bind the callback to all events fired.
+    /**
+     * Events.on 监听事件
+     * @param  {String}   events   自定义事件名 多个空格隔开
+     * @param  {Function} callback 事件监听函数事件触发时被调用
+     * @param  {[Object]} context  监听函数内对应上下文，this所指对象 默认指向当前类
+     * @return {this}     当前类 可以链式调用on方法
+     */
     Events.prototype.on = function(events, callback, context) {
         var cache, event, list;
         if (!callback) return this;
@@ -379,7 +386,10 @@
         return this;
     };
     
-    
+    /**
+     * Events.once 监听事件，触发一次后结束监听
+     * 参考Events.on
+     */
     Events.prototype.once = function(events, callback, context) {
         var that = this;
         var cb = function() {
@@ -393,6 +403,10 @@
     // Remove one or many callbacks. If `context` is null, removes all callbacks
     // with that function. If `callback` is null, removes all callbacks for the
     // event. If `events` is null, removes all bound callbacks for all events.
+    /**
+     * Events.off 撤销监听
+     * 参考Events.on
+     */
     Events.prototype.off = function(events, callback, context) {
         var cache, event, list, i;
 
@@ -431,6 +445,11 @@
     // passed the same arguments as `trigger` is, apart from the event name
     // (unless you're listening on `"all"`, which will cause your callback to
     // receive the true name of the event as the first argument).
+    /**
+     * Events.trigger 触发事件
+     * @param  {String} events 事件字符串
+     * @return {this}     当前类 可以链式调用trigger方法
+     */
     Events.prototype.trigger = function(events) {
         var cache, event, all, list, i, len, rest = [],
             args;
@@ -577,13 +596,9 @@
     function Attributes(){}
     
     
-    var attrRoot = "";
-    
     Attributes.prototype.initAttrs = function(root){
         
-        if(typeof root == "string"){
-            attrRoot = root+".";
-        }
+        this.__attrRoot = typeof root == "string" ? root+"." : "";
         
         this.before("set", function(name, afterValue){
             var beforeValue = getValueByPath(this, name);
@@ -599,7 +614,7 @@
     
     Attributes.prototype.set = function(name, value){
         
-        name = attrRoot + name;
+        name = this.__attrRoot + name;
         
         if(!this.set.__isAspected){
             this.initAttrs();
@@ -612,7 +627,7 @@
     
     Attributes.prototype.get = function(name){
         
-        name = attrRoot + name;
+        name = this.__attrRoot + name;
         
         return getValueByPath(this, name);
     };
@@ -641,6 +656,8 @@
         }
         return re;
     }
+
+    $Class.set = setValueByPath;
     
     
     // - from: https://gist.github.com/fengdi/5326735
@@ -651,6 +668,8 @@
         });
         return obj;
     }
+
+    $Class.get = getValueByPath;
     
     
     
@@ -722,7 +741,7 @@
                 source += "';\n"+ debugCode( 
                         "__p+=(__t=(" + interpolate + "))==null?'':__t;" , 
                         "<%="+interpolate+"%>"
-                    ) +";\n'";
+                    ) +";\n__p+='";
             } else if (evaluate) {
                 source += "';\n"+ debugCode( 
                         evaluate + ";" , 
@@ -741,6 +760,8 @@
         source = "var __t,__p='',__j=Array.prototype.join," +
         "print=function(){__p+=__j.call(arguments,'');};\n" +
         source + 'return __p;\n';
+
+        //console.log(source);
 
         try {
             var render = new Function(options.variable || 'obj', source);
